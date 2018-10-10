@@ -12,7 +12,7 @@ int victory(void)
         {
             char opponent_fail = 0;
             opponent_fail = ir_uart_getc ();
-            if (opponent_fail = 'F')
+            if (opponent_fail = 'W')
             {
                 player_victory = 1;
             }
@@ -29,8 +29,9 @@ void send_failed(void)
 
     if (ir_uart_write_ready_p ())
     {
-        char player_failed = 'F';
+        char player_failed = 'W';
         ir_uart_putc(player_failed);
     }
+
 }
-    
+

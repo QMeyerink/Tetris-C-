@@ -50,9 +50,11 @@ blocks.o: blocks.c blocks.h
 
 movements.o: movements.h movements.c
 
+communication.o: communication.c communication.h
+
 
 # Link: create ELF output file from object files.
-game.out: game.o pio.o system.o timer.o display.o ledmat.o font.o pacer.o tinygl.o navswitch.o blocks.o movements.o
+game.out: game.o pio.o system.o timer.o display.o ledmat.o font.o pacer.o tinygl.o navswitch.o blocks.o movements.o communication.o
 	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(SIZE) $@
 

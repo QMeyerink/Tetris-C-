@@ -11,6 +11,7 @@
 #include "blocks.h"
 #include "ir_uart.h"
 #include "movements.h"
+#include "communication.h"
 
 // Pre-set global arrays.
 int moveArray[7][5];
@@ -45,7 +46,8 @@ int updatedisplay(void)
         for(; j < 5; j++) {
             //Check if newly spawned block hits current statblock.
             if ((moveArray[i][j] == 1)  && (statArray[i][j] == 1)) {
-                lost = 1;
+                send_failed();
+                lost_scroll();
                 return 0;
             } else {
                 if((moveArray[i][j] == 1) || (statArray[i][j] == 1)) {
@@ -211,7 +213,7 @@ int playgame(void)
     int addstat = 0;
 
     //main function loop
-    while (lost == 0) {
+    while ((lost == 0) && (!victory())) {
         tinygl_update();
         navswitch_update ();
         pixelset();
