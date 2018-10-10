@@ -59,27 +59,6 @@ int updatedisplay(void)
     return 0;
 }
 
-void spawnblock(void)
-//Spawns next random block at top of screen
-{
-    int block = 1;
-
-    if(block == 1) {
-        block1(moveArray);
-    }
-    if( block == 2) {
-        block2(moveArray);
-    }
-    if(block == 3) {
-        block3(moveArray);
-    }
-    if(block == 4) {
-        block4(moveArray);
-    }
-
-    updatedisplay();
-}
-
 void resetboard(int array[7][5])
 //resets given array to zeros (used for active board and resetting game)
 {
@@ -109,7 +88,8 @@ int addstationary(void)
     }
     //Active block has been set to stationary, a new active block must be made.
     resetboard(moveArray);
-    spawnblock();
+    spawnblock(moveArray);
+    updatedisplay();
     return 0;
 }
 
@@ -132,8 +112,6 @@ int pixelset(void)
     }
     return 0;
 }
-
-
 
 int checkmove(void)
 //Todo - Rotation calls in North and south directions (replacing current down)
@@ -178,6 +156,7 @@ int lost_scroll(void)
     }
     return 0;
 }
+
 int checkrows(void)
 {
     int rowTotal = 0;
@@ -225,7 +204,8 @@ int playgame(void)
     // reset and make first block
     TCCR1B = 0x05;
     resetgame();
-    spawnblock();
+    spawnblock(moveArray);
+    updatedisplay();
     pixelset();
     TCNT1 = 0;
     int addstat = 0;

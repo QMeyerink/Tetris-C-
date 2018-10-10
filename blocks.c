@@ -42,3 +42,22 @@ void block4(int moveArray[7][5])
     moveArray[1][3] = 1;
 
 }
+
+void spawnblock(int moveArray[7][5])
+//Spawns next random block at top of screen
+{
+    int block = 1;
+
+    if(block == 1) {
+        block1(moveArray);
+    }
+    if( block == 2) {
+        block2(moveArray);
+    }
+    if(block == 3) {
+        block3(moveArray);
+    }
+    if(block == 4) {
+        block4(moveArray);
+    }
+}
