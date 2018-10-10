@@ -48,10 +48,11 @@ navswitch.o: ../../../drivers/navswitch.c ../../../drivers/avr/delay.h ../../../
 
 blocks.o: blocks.c blocks.h
 
+movements.o: movements.h movements.c
 
 
 # Link: create ELF output file from object files.
-game.out: game.o pio.o system.o timer.o display.o ledmat.o font.o pacer.o tinygl.o navswitch.o blocks.o
+game.out: game.o pio.o system.o timer.o display.o ledmat.o font.o pacer.o tinygl.o navswitch.o blocks.o movements.o
 	$(CC) $(CFLAGS) $^ -o $@ -lm
 	$(SIZE) $@
 

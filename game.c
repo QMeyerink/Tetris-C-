@@ -10,6 +10,7 @@
 #include <stdio.h>
 #include "blocks.h"
 #include "ir_uart.h"
+#include "movements.h"
 
 // Pre-set global arrays.
 int moveArray[7][5];
@@ -132,117 +133,26 @@ int pixelset(void)
     return 0;
 }
 
-int moveleft(void)
-// Moves active block right when player uses navswitch
-{
-    int i = 0;
-    int j = 0;
-    //First checks that any movement wont go off board, or if
-    //a static block currently exists where block will move to.
-    for(; i < 7; i++) {
-        j = 0;
-        for(; j < 5; j++) {
-            if(moveArray[i][j] == 1) {
-                if(j == 0) {
-                    return 0;
-                } else if(statArray[i][j] == 1) {
-                    return 0;
-                }
-            }
-        }
-    }
-    i = 0;
-    //If it is safe to move, every active pixel is moved left one.
-    for(; i < 7; i++) {
-        j = 0;
-        for(; j < 5; j++) {
-            if(moveArray[i][j] == 1) {
-                moveArray[i][j-1] = 1;
-                moveArray[i][j] = 0;
-            }
-        }
-    }
-    return 0;
-}
 
-int moveright(void)
-//Moves the active block right when player moves nawswitch.
-{
-    int i = 0;
-    int j = 0;
-    //First checks that any movement wont go off board, or if
-    //a static block currently exists where block will move to.
-    for(; i < 7; i++) {
-        j = 0;
-        for(; j < 5; j++) {
-            if(moveArray[i][j] == 1) {
-                if((j == 4) || (statArray[i][j] == 1))  {
-                    return 0;
-
-                }
-            }
-        }
-    }
-    //If it is safe to move, every active pixel is moved right one.
-    i = 6;
-    for(; i >= 0; i--) {
-        j = 4;
-        for(; j >= 0; j--) {
-            if(moveArray[i][j] == 1) {
-                moveArray[i][j+1] = 1;
-                moveArray[i][j] = 0;
-            }
-        }
-    }
-    return 0;
-}
-
-int movedown(void)
-//Is the move block down function. Does checks for if block collision or bottom is met.
-{
-    int i = 0;
-    int j = 0;
-    //First checks that any movement wont go off board, or if
-    //a static block currently exists where block will move to.
-    for(; i < 7; i++) {
-        j = 0;
-        for(; j < 5; j++) {
-            if(moveArray[i][j] == 1) {
-                if((i == 6) || (statArray[i+1][j] == 1)) {
-                    addstationary();
-                    return 0;
-                }
-            }
-        }
-    }
-    //If it is safe to move, every active pixel is moved right one.
-    i = 6;
-    for(; i >= 0; i--) {
-        j = 4;
-        for(; j >= 0; j--) {
-            if(moveArray[i][j] == 1) {
-                moveArray[i+1][j] = 1;
-                moveArray[i][j] = 0;
-            }
-        }
-    }
-    return 0;
-}
 
 int checkmove(void)
 //Todo - Rotation calls in North and south directions (replacing current down)
 // Checks if the navswitch has been used, and calls apporiate functions if so.
 {
+    int addstat = 0;
     if(navswitch_push_event_p (NAVSWITCH_WEST)) {
-        moveleft();
+        moveleft(moveArray,statArray);
     }
 
     if(navswitch_push_event_p (NAVSWITCH_EAST)) {
-        moveright();
+        moveright(moveArray,statArray);
     }
 
     if(navswitch_push_event_p (NAVSWITCH_SOUTH)) {
-        movedown();
+        addstat = movedown(moveArray,statArray);
+        if(addstat == 1) {
+                addstationary();
+            }
     }
 
     return 0;
@@ -318,6 +228,7 @@ int playgame(void)
     spawnblock();
     pixelset();
     TCNT1 = 0;
+    int addstat = 0;
 
     //main function loop
     while (lost == 0) {
@@ -327,7 +238,10 @@ int playgame(void)
         checkmove();
         checkrows();
         if(TCNT1 > 7000) {
-            movedown();
+            addstat = movedown(moveArray,statArray);
+            if(addstat == 1) {
+                addstationary();
+            }
             TCNT1 = 0;
         }
         updatedisplay();
