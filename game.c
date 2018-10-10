@@ -46,8 +46,7 @@ int updatedisplay(void)
         for(; j < 5; j++) {
             //Check if newly spawned block hits current statblock.
             if ((moveArray[i][j] == 1)  && (statArray[i][j] == 1)) {
-                send_failed();
-                lost_scroll();
+                lost = 1;
                 return 0;
             } else {
                 if((moveArray[i][j] == 1) || (statArray[i][j] == 1)) {
@@ -213,7 +212,7 @@ int playgame(void)
     int addstat = 0;
 
     //main function loop
-    while ((lost == 0) && (!victory())) {
+    while (lost == 0) {
         tinygl_update();
         navswitch_update ();
         pixelset();

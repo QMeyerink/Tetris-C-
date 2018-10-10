@@ -6,15 +6,16 @@ int victory(void)
     ir_uart_init ();
     int player_victory = 0;
 
-    while (!lost)
+    while (1)
     {
-        if (ir_uart_read_ready_p ())
+        if(ir_uart_read_ready_p ())
         {
             char opponent_fail = 0;
             opponent_fail = ir_uart_getc ();
-            if (opponent_fail = 'W')
+            if(opponent_fail = 'W')
             {
                 player_victory = 1;
+                break;
             }
         }
     }
