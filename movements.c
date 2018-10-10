@@ -64,7 +64,7 @@ int moveright(int moveArray[7][5],int statArray[7][5])
     return 0;
 }
 
-int movedown(int moveArray[7][5],int statArray[7][5])
+extern int movedown(int moveArray[7][5],int statArray[7][5])
 //Is the move block down function. Does checks for if block collision or bottom is met.
 {
     int i = 0;
@@ -78,7 +78,7 @@ int movedown(int moveArray[7][5],int statArray[7][5])
             if(moveArray[i][j] == 1) {
                 if((i == 6) || (statArray[i+1][j] == 1)) {
                     addstat = 1;
-                    return 0;
+                    return addstat;
                 }
             }
         }
