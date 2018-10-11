@@ -46,7 +46,6 @@ int updatedisplay(void)
         for(; j < 5; j++) {
             //Check if newly spawned block hits current statblock.
             if ((moveArray[i][j] == 1)  && (statArray[i][j] == 1)) {
-                send_failed();
                 return 1;
             } else {
                 if((moveArray[i][j] == 1) || (statArray[i][j] == 1)) {
@@ -151,6 +150,7 @@ int end_scroll(int won)
     if(won == 1) {
         tinygl_text("You Won!");
     } else {
+        send_failed();
         tinygl_text ("You lost!");
     }
 
@@ -214,6 +214,7 @@ int playgame(void)
     TCNT1 = 0;
     int addstat = 0;
     int lost = 0;
+    int won = 0;
 
     //main function loop
     while (lost == 0) {
@@ -222,7 +223,9 @@ int playgame(void)
         pixelset();
         checkmove();
         checkrows();
-        won = victory();
+        if(victory() == 1) {
+            won = 1;
+        }
         if(TCNT1 > 7000) {
             addstat = movedown(moveArray,statArray);
             if(addstat == 1) {
@@ -231,16 +234,17 @@ int playgame(void)
             TCNT1 = 0;
         }
         lost = updatedisplay();
-
-
     }
+
     if(won == 1) {
+        PORTC |= (1<<2);
         end_scroll(1);
     } else {
         end_scroll(0);
     }
     return 0;
 }
+
 int main (void)
 {
     // initilise programs

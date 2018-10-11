@@ -1,5 +1,6 @@
 #include <stdlib.h>
 #include <stdio.h>
+#include <avr/io.h>
 
 void block1(int moveArray[7][5])
 {
@@ -46,7 +47,11 @@ void block4(int moveArray[7][5])
 void spawnblock(int moveArray[7][5])
 //Spawns next random block at top of screen
 {
-    int block = 1;
+    int time = 0;
+
+    int block = 0;
+    time = TCNT1;
+    block = time % 4 + 1;
 
     if(block == 1) {
         block1(moveArray);
