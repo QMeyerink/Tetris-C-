@@ -1,3 +1,9 @@
+// File:    Game
+// Authors: Quinlan Meyerink,
+//          Haruka Ichinose
+// Date:    11 Oct 2018
+// Descr:   Blocks module
+
 #include <stdlib.h>
 #include <stdio.h>
 #include <avr/io.h>
@@ -47,12 +53,14 @@ void block4(int moveArray[7][5])
 void spawnblock(int moveArray[7][5])
 //Spawns next random block at top of screen
 {
-    int time = 0;
 
+    int time = 0;
     int block = 0;
+    //Using the TNCT1 timer 'random' number created
     time = TCNT1;
     block = time % 4 + 1;
 
+    //Calls to block formation depending on generated number
     if(block == 1) {
         block1(moveArray);
     }

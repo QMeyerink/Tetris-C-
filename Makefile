@@ -1,7 +1,8 @@
-# File:   Makefile
-# Author: M. P. Hayes, UCECE
-# Date:   12 Sep 2010
-# Descr:  Makefile for game
+# File:    Game
+# Authors: Quinlan Meyerink,
+#          Haruka Ichinose
+# Date:    11 Oct 2018
+# Descr:   Makefile for game
 
 # Definitions.
 CC = avr-gcc

@@ -1,3 +1,8 @@
+// File:    Game
+// Authors: Quinlan Meyerink,
+//          Haruka Ichinose
+// Date:    11 Oct 2018
+// Descr:   Movements module
 
 int moveleft(int moveArray[7][5],int statArray[7][5])
 // Moves active block left when player uses navswitch

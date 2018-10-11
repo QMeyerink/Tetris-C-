@@ -1,3 +1,9 @@
+// File:    Game
+// Authors: Quinlan Meyerink,
+//          Haruka Ichinose
+// Date:    11 Oct 2018
+// Descr:   Communications module
+
 #include "ir_uart.h"
 
 /* Check if the opponent is already failed and player won. */

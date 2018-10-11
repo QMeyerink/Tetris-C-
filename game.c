@@ -1,3 +1,8 @@
+// File:    Game
+// Authors: Quinlan Meyerink,
+//          Haruka Ichinose
+// Date:    11 Oct 2018
+// Descr:   Main game source
 #include "system.h"
 #include "pacer.h"
 #include "tinygl.h"
@@ -17,7 +22,6 @@
 int moveArray[7][5];
 int statArray[7][5];
 int dispArray[7][5];
-int won;
 
 void resetgame(void)
 //resets all arrays to zero - (may just use other reset)
