@@ -2,6 +2,6 @@
 #define START_GAME_H
 
 
-void start_game(void)
+void start_game(void);
 
 #endif

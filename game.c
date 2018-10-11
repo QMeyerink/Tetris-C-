@@ -17,6 +17,7 @@
 #include "ir_uart.h"
 #include "movements.h"
 #include "communication.h"
+#include "start_game.h"
 
 // Pre-set global arrays.
 int moveArray[7][5];
@@ -34,7 +35,6 @@ void resetgame(void)
             moveArray[i][j] = 0;
             statArray[i][j] = 0;
             dispArray[i][j] = 0;
-            won = 0;
         }
     }
 }
@@ -257,6 +257,7 @@ int main (void)
     tinygl_init (1000);
     navswitch_init ();
 
+    start_game();
     playgame();
 
     return 0;

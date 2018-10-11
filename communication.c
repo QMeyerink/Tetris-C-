@@ -35,30 +35,3 @@ void send_failed(void)
     }
 
 }
-
-int check_ready(void) {
-
-    ir_uart_init ();
-    int player_ready = 0;
-
-    if(ir_uart_read_ready_p ()) {
-        char opponent_ready = 0;
-        opponent_ready = ir_uart_getc ();
-        if(opponent_ready = 'R') {
-            player_ready = 1;
-
-        }
-    }
-    return player_ready;
-}
-
-void send_ready(void)
-{
-    ir_uart_init ();
-
-    if (ir_uart_write_ready_p ()) {
-        char player_ready = 'R';
-        ir_uart_putc(player_ready);
-    }
-
-}
