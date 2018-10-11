@@ -13,6 +13,7 @@
 void start_game(void)
 {
     navswitch_init ();
+    pacer_init (1000);
     tinygl_font_set (&font5x7_1);
     tinygl_text_speed_set (10);
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
@@ -28,9 +29,7 @@ void start_game(void)
 
         while (navswitch_pushed == 0) {
             if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
-                navswitch_pushed = 1;
-                PORTC |= (1 << 2);
-                
+                navswitch_pushed = 1;                
             }
             pacer_wait ();
             tinygl_update ();
@@ -44,6 +43,9 @@ void start_game(void)
             if (ir_uart_write_ready_p ()) {
                 ir_uart_putc ('R');
                 }
+                
+            pacer_wait ();
+            
             if (ir_uart_read_ready_p ()) {
                 char check_opponent;
                 check_opponent = ir_uart_getc ();
