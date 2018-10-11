@@ -22,8 +22,11 @@ void start_game(void)
     while (checked == 0)
     {
         tinygl_text("Ready?");
+        navswitch_pushed = 0;
 
-        while (!navswitch_push_event_p (NAVSWITCH_PUSH)) {
+        while (navswitch_pushed == 0) {
+            if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
+                navswitch_pushed = 1;
             pacer_wait ();
             tinygl_update ();
         }
