@@ -17,7 +17,7 @@
 int moveArray[7][5];
 int statArray[7][5];
 int dispArray[7][5];
-int lost;
+int won;
 
 void resetgame(void)
 //resets all arrays to zero - (may just use other reset)
@@ -30,7 +30,7 @@ void resetgame(void)
             moveArray[i][j] = 0;
             statArray[i][j] = 0;
             dispArray[i][j] = 0;
-            lost = 0;
+            won = 0;
         }
     }
 }
@@ -46,8 +46,8 @@ int updatedisplay(void)
         for(; j < 5; j++) {
             //Check if newly spawned block hits current statblock.
             if ((moveArray[i][j] == 1)  && (statArray[i][j] == 1)) {
-                lost = 1;
-                return 0;
+                send_failed();
+                return 1;
             } else {
                 if((moveArray[i][j] == 1) || (statArray[i][j] == 1)) {
                     dispArray[i][j] = 1;
@@ -130,16 +130,16 @@ int checkmove(void)
     if(navswitch_push_event_p (NAVSWITCH_SOUTH)) {
         addstat = movedown(moveArray,statArray);
         if(addstat == 1) {
-                addstationary();
-            }
+            addstationary();
+        }
     }
 
     return 0;
 }
 
-int lost_scroll(void)
+int end_scroll(int won)
 //ToDo
-//Function that scrools.You lost! when player loses
+//Function that scrolls a win or lose message if player won or lost
 {
 
     pacer_init (1000);
@@ -148,8 +148,11 @@ int lost_scroll(void)
     tinygl_font_set (&font5x7_1);
     tinygl_text_speed_set (10);
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
-    tinygl_text ("You lost!");
-
+    if(won == 1) {
+        tinygl_text("You Won!");
+    } else {
+        tinygl_text ("You lost!");
+    }
 
     while (1) {
         pacer_wait ();
@@ -167,9 +170,9 @@ int checkrows(void)
     int i = 0;
     int j = 0;
 
-     for(; i < 7; i++) {
-         rowTotal = 0;
-         j = 0;
+    for(; i < 7; i++) {
+        rowTotal = 0;
+        j = 0;
         for(; j < 5; j++) {
             if (statArray[i][j] == 1) {
                 rowTotal += 1;
@@ -210,6 +213,7 @@ int playgame(void)
     pixelset();
     TCNT1 = 0;
     int addstat = 0;
+    int lost = 0;
 
     //main function loop
     while (lost == 0) {
@@ -218,6 +222,7 @@ int playgame(void)
         pixelset();
         checkmove();
         checkrows();
+        won = victory();
         if(TCNT1 > 7000) {
             addstat = movedown(moveArray,statArray);
             if(addstat == 1) {
@@ -225,11 +230,15 @@ int playgame(void)
             }
             TCNT1 = 0;
         }
-        updatedisplay();
+        lost = updatedisplay();
 
 
     }
-    lost_scroll();
+    if(won == 1) {
+        end_scroll(1);
+    } else {
+        end_scroll(0);
+    }
     return 0;
 }
 int main (void)

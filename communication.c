@@ -6,17 +6,11 @@ int victory(void)
     ir_uart_init ();
     int player_victory = 0;
 
-    while (1)
-    {
-        if(ir_uart_read_ready_p ())
-        {
-            char opponent_fail = 0;
-            opponent_fail = ir_uart_getc ();
-            if(opponent_fail = 'W')
-            {
-                player_victory = 1;
-                break;
-            }
+    if(ir_uart_read_ready_p ()) {
+        char opponent_fail = 0;
+        opponent_fail = ir_uart_getc ();
+        if(opponent_fail = '/') {
+            player_victory = 1;
         }
     }
     return player_victory;
@@ -28,9 +22,8 @@ void send_failed(void)
 {
     ir_uart_init ();
 
-    if (ir_uart_write_ready_p ())
-    {
-        char player_failed = 'W';
+    if (ir_uart_write_ready_p ()) {
+        char player_failed = '/';
         ir_uart_putc(player_failed);
     }
 
