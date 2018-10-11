@@ -18,7 +18,6 @@ void start_game(void)
     int opponent_ready = 0;
     int player_ready = 0;
     int checked = 0;
-    int ready_recieved = 0;
 
     while (checked == 0)
     {
@@ -32,16 +31,15 @@ void start_game(void)
         player_ready = 1;
 
         while (opponent_ready == 0) {
-            ir_serial_ret_t ret;
 
-            if (ir_uart_write_ready_p) {
+            if (ir_uart_write_ready_p ()) {
                 ir_uart_putc ('R');
                 }
-            if (ir_uart_read_ready_p) {
+            if (ir_uart_read_ready_p ()) {
                 char check_opponent;
-                check_oppnent = ir_uart_getc ();
-                if (check_oppnent == 'R') {
-                    opponent_ready == 1;
+                check_opponent = ir_uart_getc ();
+                if (check_opponent == 'R') {
+                    opponent_ready = 1;
                 }
             }
         }
