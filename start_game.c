@@ -18,6 +18,7 @@ void start_game(void)
     tinygl_font_set (&font5x7_1);
     tinygl_text_speed_set (10);
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
+    TCCR1B = 0x05;
 
     int opponent_ready = 0;
     int player_ready = 0;
@@ -36,12 +37,12 @@ void start_game(void)
         navswitch_update ();
     }
 
+    player_ready = 1;
 
-    while ((opponent_ready && player_ready) == 0) {
+    while (opponent_ready == 0) {
 
         if (ir_uart_write_ready_p ()) {
             ir_uart_putc ('R');
-            player_ready = 1;
             PORTC |= (1 << 2);
         }
 
