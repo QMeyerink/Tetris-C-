@@ -5,6 +5,8 @@
 #include "ir_uart.h"
 #include "tinygl.h"
 #include "../fonts/font5x7_1.h"
+#include <avr/io.h>
+
 
 
 /* Start game at the same time. */
@@ -22,13 +24,17 @@ void start_game(void)
     while (checked == 0)
     {
         tinygl_text("Ready?");
-        navswitch_pushed = 0;
+        int navswitch_pushed = 0;
 
         while (navswitch_pushed == 0) {
             if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
                 navswitch_pushed = 1;
+                PORTC |= (1 << 2);
+                
+            }
             pacer_wait ();
             tinygl_update ();
+            navswitch_update ();
         }
 
         player_ready = 1;
