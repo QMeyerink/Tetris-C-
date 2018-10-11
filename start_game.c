@@ -14,6 +14,7 @@ void start_game(void)
 {
     navswitch_init ();
     pacer_init (1000);
+    TCNT! = 0;
     tinygl_font_set (&font5x7_1);
     tinygl_text_speed_set (10);
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
@@ -29,7 +30,7 @@ void start_game(void)
 
         while (navswitch_pushed == 0) {
             if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
-                navswitch_pushed = 1;                
+                navswitch_pushed = 1;
             }
             pacer_wait ();
             tinygl_update ();
@@ -43,9 +44,9 @@ void start_game(void)
             if (ir_uart_write_ready_p ()) {
                 ir_uart_putc ('R');
                 }
-                
-            pacer_wait ();
-            
+
+            if(TCNT1 > 3000) {
+
             if (ir_uart_read_ready_p ()) {
                 char check_opponent;
                 check_opponent = ir_uart_getc ();
@@ -54,6 +55,7 @@ void start_game(void)
                     checked = 1;
                 }
             }
+        }
         }
         //tinygle_text("Go!");
         //while
