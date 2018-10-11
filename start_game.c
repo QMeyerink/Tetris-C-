@@ -55,6 +55,7 @@ void start_game(void)
                     checked = 1;
                 }
             }
+            TCNT1 = 0;
         }
         }
         //tinygle_text("Go!");
