@@ -51,6 +51,7 @@ void start_game(void)
                 check_opponent = ir_uart_getc ();
                 if (check_opponent == 'R') {
                     opponent_ready = 1;
+                    checked = 1;
                 }
             }
         }
