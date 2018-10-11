@@ -35,11 +35,12 @@ void start_game(void)
             ir_serial_ret_t ret;
 
             if (ir_uart_write_ready_p) {
-                ir_serial_transmit(IR_SERIAL_OK);
-            }
+                ir_uart_putc ('R');
+                }
             if (ir_uart_read_ready_p) {
-                ret = ir_serial_receive (&data);
-                if (ret == IR_SERIAL_OK) {
+                char check_opponent;
+                check_oppnent = ir_uart_getc ();
+                if (check_oppnent == 'R') {
                     opponent_ready == 1;
                 }
             }
