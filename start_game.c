@@ -36,12 +36,13 @@ void start_game(void)
         navswitch_update ();
     }
 
-    player_ready = 1;
 
-    while (opponent_ready == 0) {
+    while ((opponent_ready && player_ready) == 0) {
 
         if (ir_uart_write_ready_p ()) {
             ir_uart_putc ('R');
+            player_ready = 1;
+            PORTC |= (1 << 2);
         }
 
         if(TCNT1 > 3000) {
@@ -60,7 +61,7 @@ void start_game(void)
     //tinygle_text("Go!");
     //while
 }
-}
+
 
 
 
