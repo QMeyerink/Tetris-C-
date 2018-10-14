@@ -2,13 +2,10 @@
 #define COMMUNICATION_H
 
 /** Constantly checking if the opponent failed while the player is still playing. */
-int victory(void);
+int victory(char recieve);
 
 /** Send a character to opponent to tell the player failed. */
-void send_failed(void);
+void send_failed(char send);
 
-int check_ready(void);
-
-void send_ready(void);
 
 #endif

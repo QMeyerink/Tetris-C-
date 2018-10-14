@@ -141,20 +141,12 @@ int checkmove(void)
 }
 
 int end_scroll(int won)
-//ToDo
 //Function that scrolls a win or lose message if player won or lost
 {
-
-    pacer_init (1000);
-    tinygl_init (1000);
-
-    tinygl_font_set (&font5x7_1);
-    tinygl_text_speed_set (10);
-    tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
     if(won == 1) {
         tinygl_text("You Won!");
     } else {
-        send_failed();
+        send_failed(',');
         tinygl_text ("You lost!");
     }
 
@@ -218,7 +210,7 @@ int playgame(void)
     TCNT1 = 0;
     int addstat = 0;
     int lost = 0;
-    int won = 0;
+    int won = 0;;
 
     //main function loop
     while (lost == 0) {
@@ -227,7 +219,8 @@ int playgame(void)
         pixelset();
         checkmove();
         checkrows();
-        if(victory() == 1) {
+        if(victory(',') == 1) {
+            PORTC |= (1 << 2);
             won = 1;
         }
         if(TCNT1 > 7000) {
@@ -241,7 +234,6 @@ int playgame(void)
     }
 
     if(won == 1) {
-        PORTC |= (1<<2);
         end_scroll(1);
     } else {
         end_scroll(0);
@@ -251,15 +243,13 @@ int playgame(void)
 
 int main (void)
 {
-    // initilise programs
-    system_init ();
-    pacer_init (1000);
-    tinygl_init (1000);
-    navswitch_init ();
+while(1) {
 
     start_game();
+
     playgame();
 
+}
     return 0;
 
 }

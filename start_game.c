@@ -6,27 +6,31 @@
 #include "tinygl.h"
 #include "../fonts/font5x7_1.h"
 #include <avr/io.h>
+#include "communication.h"
 
+//
+void game_init(void) {
+
+    system_init ();
+    tinygl_init (2000);
+    pacer_init(3000);
+    navswitch_init ();
+    ir_uart_init ();
+    tinygl_font_set (&font5x7_1);
+    tinygl_text_speed_set (20);
+    tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
+
+}
 
 
 /* Start game at the same time. */
 void start_game(void)
 {
-    navswitch_init ();
-    pacer_init (1000);
-    TCNT1 = 0;
-    tinygl_font_set (&font5x7_1);
-    tinygl_text_speed_set (10);
-    tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
-    TCCR1B = 0x05;
+    game_init();
 
     int opponent_ready = 0;
-    int player_ready = 0;
-    int checked = 0;
-
-
-    tinygl_text("Ready?");
     int navswitch_pushed = 0;
+    tinygl_text("Ready?");
 
     while (navswitch_pushed == 0) {
         if (navswitch_push_event_p (NAVSWITCH_PUSH)) {
@@ -36,28 +40,17 @@ void start_game(void)
         tinygl_update ();
         navswitch_update ();
     }
-
-    player_ready = 1;
+    tinygl_clear();
+    UCSR1A |= BIT (TXC1);
+    UCSR1A |= BIT (RXEN1);
 
     while (opponent_ready == 0) {
-
-        if (ir_uart_write_ready_p ()) {
-            ir_uart_putc ('R');
-            PORTC |= (1 << 2);
+        if(victory('/') == 1) {
+            opponent_ready = 1;
         }
 
-        if(TCNT1 > 3000) {
-
-            if (ir_uart_read_ready_p ()) {
-                char check_opponent;
-                check_opponent = ir_uart_getc ();
-                if (check_opponent == 'R') {
-                    opponent_ready = 1;
-                    checked = 1;
-                }
-            }
-            TCNT1 = 0;
-        }
+        send_failed('/');
+        pacer_wait();
     }
     //tinygle_text("Go!");
     //while
