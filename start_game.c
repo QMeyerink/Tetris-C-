@@ -18,8 +18,8 @@
 void game_init(void) {
 
     system_init ();
-    tinygl_init (2000);
-    pacer_init(3000);
+    tinygl_init (3000);
+    pacer_init(2000);
     navswitch_init ();
     ir_uart_init ();
     tinygl_font_set (&font5x7_1);
@@ -35,7 +35,6 @@ void start_game(void)
     game_init();
 
     int opponent_ready = 0;
-    int navswitch_pushed = 0;
 
     tinygl_text("Ready?");
 
@@ -52,6 +51,7 @@ void start_game(void)
     UCSR1A |= BIT (RXEN1);
 
     while (opponent_ready == 0) {
+        tinygl_update();
         if(victory('/') == 1) {
             opponent_ready = 1;
         }

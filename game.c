@@ -157,10 +157,10 @@ int end_scroll(int won)
         pacer_wait ();
         tinygl_update ();
         navswitch_update();
-        if(navswitch_push_event_p (NAVSWITCH_PUSH) == 1) {
-            main();
+        if(navswitch_push_event_p (NAVSWITCH_PUSH)) {
+            break;
+        }
     }
-}
     return 0;
 }
 
@@ -237,6 +237,7 @@ int playgame(void)
             }
             TCNT1 = 0;
         }
+        checkrows();
         lost = updatedisplay();
     }
 
@@ -250,15 +251,15 @@ int playgame(void)
 
 int main (void)
 {
-while(1) {
+    while(1) {
 
-    resetgame();
+        resetgame();
 
-    start_game();
+        start_game();
 
-    playgame();
+        playgame();
 
-}
+    }
     return 0;
 
 }
