@@ -4,6 +4,8 @@
 # Date:    11 Oct 2018
 # Descr:   Makefile for game
 
+#All .o dirs changed to three deep as instructed by tutor.
+
 # Definitions.
 CC = avr-gcc
 CFLAGS = -mmcu=atmega32u2 -Os -Wall -Wstrict-prototypes -Wextra -g -I. -I ../../../utils -I ../../../fonts -I ../../../drivers -I ../../../drivers/avr

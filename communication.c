@@ -6,26 +6,26 @@
 
 #include "ir_uart.h"
 
-/* Check if the opponent is already failed and player won. */
+/* Check if the board has recieved specified char from other board */
 int victory(char recieve)
 {
 
     ir_uart_init();
-    int player_victory = 0;
+    int recieved = 0;
+    char recieved_char = 0;
 
     if(ir_uart_read_ready_p ()) {
-        char opponent_fail = 0;
-        opponent_fail = ir_uart_getc ();
-        if(opponent_fail == recieve) {
-            player_victory = 1;
+        recieved_char = ir_uart_getc ();
+        if(recieved_char == recieve) {
+            recieved = 1;
 
         }
     }
-    return player_victory;
+    return recieved;
 }
 
 
-/* Send to opponent what the player failed. */
+/* Send a specified char to opponent  */
 void send_failed(char send)
 {
 

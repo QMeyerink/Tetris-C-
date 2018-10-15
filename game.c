@@ -3,6 +3,7 @@
 //          Haruka Ichinose
 // Date:    11 Oct 2018
 // Descr:   Main game source
+
 #include "system.h"
 #include "pacer.h"
 #include "tinygl.h"
@@ -143,6 +144,8 @@ int checkmove(void)
 int end_scroll(int won)
 //Function that scrolls a win or lose message if player won or lost
 {
+    tinygl_clear();
+    tinygl_update();
     if(won == 1) {
         tinygl_text("You Won!");
     } else {
@@ -153,7 +156,11 @@ int end_scroll(int won)
     while (1) {
         pacer_wait ();
         tinygl_update ();
+        navswitch_update();
+        if(navswitch_push_event_p (NAVSWITCH_PUSH) == 1) {
+            main();
     }
+}
     return 0;
 }
 
@@ -244,6 +251,8 @@ int playgame(void)
 int main (void)
 {
 while(1) {
+
+    resetgame();
 
     start_game();
 
