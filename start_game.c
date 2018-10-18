@@ -14,16 +14,20 @@
 #include <avr/io.h>
 #include "communication.h"
 
+#define TINYGL_UPDATE 3000
+#define PACER_WAIT 2000
+#define TINYGL_TEXT_SPEED 20
+
 // Initialise all game dependencies.
 void game_init(void) {
 
     system_init ();
-    tinygl_init (3000);
-    pacer_init(2000);
+    tinygl_init (TINYGL_UPDATE);
+    pacer_init(PACER_WAIT);
     navswitch_init ();
     ir_uart_init ();
     tinygl_font_set (&font5x7_1);
-    tinygl_text_speed_set (20);
+    tinygl_text_speed_set (TINYGL_TEXT_SPEED);
     tinygl_text_mode_set (TINYGL_TEXT_MODE_SCROLL);
 
 }
@@ -35,7 +39,7 @@ void start_game(void)
     game_init();
 
     int opponent_ready = 0;
-
+    char game_start = '/';
     tinygl_text("Ready?");
 
     // Wait for player to 'ready up' and scroll 'Ready?'.
@@ -50,13 +54,15 @@ void start_game(void)
     UCSR1A |= BIT (TXC1);
     UCSR1A |= BIT (RXEN1);
 
+    //Wait untill board has recieved specified char
+    //While also sening char to other board.
     while (opponent_ready == 0) {
         tinygl_update();
-        if(victory('/') == 1) {
+        if(recieve_char(game_start) == 1) {
             opponent_ready = 1;
         }
 
-        send_failed('/');
+        send_char(game_start);
         pacer_wait();
     }
 }

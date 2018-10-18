@@ -25,6 +25,12 @@ int moveArray[7][5];
 int statArray[7][5];
 int dispArray[7][5];
 
+
+#define CLOCK_SPEED 0x05
+#define MOVE_DOWN_SPEED 7000
+#define WIN_LOSE_CHAR ','
+
+
 void resetgame(void)
 //resets all arrays to zero - (may just use other reset)
 {
@@ -39,6 +45,7 @@ void resetgame(void)
         }
     }
 }
+
 int updatedisplay(void)
 // Updates display array and performs and endgame check
 {
@@ -119,7 +126,6 @@ int pixelset(void)
 }
 
 int checkmove(void)
-//Todo - Rotation calls in North and south directions (replacing current down)
 // Checks if the navswitch has been used, and calls apporiate functions if so.
 {
     int addstat = 0;
@@ -149,7 +155,7 @@ int end_scroll(int won)
     if(won == 1) {
         tinygl_text("You Won!");
     } else {
-        send_failed(',');
+        send_char(WIN_LOSE_CHAR);
         tinygl_text ("You lost!");
     }
 
@@ -164,6 +170,7 @@ int end_scroll(int won)
     return 0;
 }
 
+//Checks all rows to see if any have become full (and need to be deleted) deletes if so.
 int checkrows(void)
 {
     int rowTotal = 0;
@@ -173,6 +180,7 @@ int checkrows(void)
     int i = 0;
     int j = 0;
 
+    //Loops through nested array checking if any rows are filled.
     for(; i < 7; i++) {
         rowTotal = 0;
         j = 0;
@@ -186,6 +194,8 @@ int checkrows(void)
             }
         }
     }
+
+    //If row is filled it is deleted and every block above it is moved down.
     j = 0;
     i = rowToRemove;
     if(removeRow == 1) {
@@ -209,12 +219,13 @@ int checkrows(void)
 int playgame(void)
 {
     // reset and make first block
-    TCCR1B = 0x05;
-    resetgame();
+
+    TCCR1B = CLOCK_SPEED;
     spawnblock(moveArray);
     updatedisplay();
     pixelset();
     TCNT1 = 0;
+
     int addstat = 0;
     int lost = 0;
     int won = 0;;
@@ -226,11 +237,13 @@ int playgame(void)
         pixelset();
         checkmove();
         checkrows();
-        if(victory(',') == 1) {
+
+        if(recieve_char(WIN_LOSE_CHAR) == 1) {
             PORTC |= (1 << 2);
             won = 1;
         }
-        if(TCNT1 > 7000) {
+
+        if(TCNT1 > MOVE_DOWN_SPEED) {
             addstat = movedown(moveArray,statArray);
             if(addstat == 1) {
                 addstationary();
@@ -241,6 +254,7 @@ int playgame(void)
         lost = updatedisplay();
     }
 
+    //Calls the end_scroll function to show either won or lost.
     if(won == 1) {
         end_scroll(1);
     } else {

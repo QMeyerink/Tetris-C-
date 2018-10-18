@@ -7,7 +7,7 @@
 #include "ir_uart.h"
 
 /* Check if the board has recieved specified char from other board */
-int victory(char recieve)
+int recieve_char(char recieve)
 {
 
     ir_uart_init();
@@ -26,7 +26,7 @@ int victory(char recieve)
 
 
 /* Send a specified char to opponent  */
-void send_failed(char send)
+void send_char(char send)
 {
 
     if (ir_uart_write_ready_p ()) {
